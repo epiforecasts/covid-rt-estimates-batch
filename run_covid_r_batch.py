@@ -220,20 +220,6 @@ def populate_file_share():
     file_share = file_service.FileService(account_name=STORAGE_ACCOUNT_NAME,
                                           account_key=STORAGE_ACCOUNT_KEY)
 
-    # Upload the latest version of the config.R and testconfig.R
-    # file to the network share
-    file_share.create_file_from_path(
-        share_name=FILE_SHARE_NAME,
-        directory_name='',
-        file_name="config.R",
-        local_file_path='includes/config.R')
-
-    file_share.create_file_from_path(
-        share_name=FILE_SHARE_NAME,
-        directory_name='',
-        file_name="testconfig.R",
-        local_file_path='includes/testconfig.R')
-
     # Creates a file share for input / output storage.
     if not file_share.create_share(share_name=FILE_SHARE_NAME, quota=1):
         LOGGER.info("File share already exists...")
@@ -398,7 +384,7 @@ def run(datasets, production, flags):
         create_job(batch_client, COMMIT_JOB_ID, COMMIT_POOL_ID)
 
         tasks = generate_tasks(PROCESSING_JOB_ID, datasets, production, flags)
-        # batch_client.task.add_collection(job_id=PROCESSING_JOB_ID, value=tasks)
+        batch_client.task.add_collection(job_id=PROCESSING_JOB_ID, value=tasks)
         LOGGER.info("Tasks added to Job")
 
     except batch_models.BatchErrorException as err:
