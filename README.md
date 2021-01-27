@@ -36,27 +36,11 @@ This should be run automatically by the <todo: script details here>. This script
 The rscript configuration is copied from includes/config.R and includes/testconfig.R which provides the config.R file for production and test environments respectively
 The azure batch configuration is broken up amongst the contents of the env_config directory, with files that hopefully break down where things are specified. One area that is easy to confuse is pool includes the hardware that is being run whilst batch_vm specifies the os that is being run on that hardware.
 
-## Setup from scratch
-Jobs are submitted to azure with a "Scheduling VM".
-This is a small VM that uses cron to trigger the submission of jobs to azure.
-
-Create a VM on azure, the smallest possible VM will be fine.
-Any version of linux should be fine, this was tested on Ubuntu Server 18.04 LTS.
-
-Connect via Bastion or SSH using the administrator account, as sudo permissions 
-will be needed
-Enter the command   
-```nano install.sh```  
-This will open up a text editor. Copy and paste the contents of install.sh into 
-the text editor. Save it (Ctrl + O) and exit (Ctrl + x).  
-Enter the following command to make the script executable 
-```chmod +x install.sh``` 
-
 #### Service Principal and Applications
 
 This infrastructure already exists and shouldn't need altering or re-creating, but is here for completeness sake.
 
-Depending on the context the entitiy we are talking about can be called an Application or a Service Principal.
+Depending on the context the entity we are talking about can be called an Application or a Service Principal.
 Microsoft's justification is "The application object is the global representation of your application for use across all tenants, and the service principal is the local representation for use in a specific tenant."
 I will just refer to it as an Application, but when you see Service Principal in the Azure portal, it's referring to the same thing
 
@@ -75,27 +59,31 @@ Go to Key Vaults and click on the appropriate key vault. From here go to
 The same thing will need to be done for the Key Vault Access control (IAM).
 From here you can give your Application the "contributor" role. This will allow the Application to create a key vault object that contains all other secrets needed by accounts.py.
 
-#### Personal Access Token
+## Setup from scratch
+Jobs are submitted to azure with a "Scheduling VM".
+This is a small VM that uses cron to trigger the submission of jobs to azure.
 
-The covid-rt-estimates-infra repo is private, so the script will need a Github "Personal Access Token" from an account that has access to this repo (which you should have if you are reading this!).
-In github, go to settings, Developer settings and Personal access tokens. 
-From here you can create a personal access token. Ensure that "Full control of private repositories" is checked, otherwise the token will not have the access that we need.
-Github will now display a long string, this is your personal access token.
-When the repository is first cloned, the personel access information is stored in the .git folder. This will allow the repo to keep itself up to date for as long as the personal access token is valid. 
+Create a VM on azure, the smallest possible VM will be fine.
+Any version of linux should be fine, this was tested on Ubuntu Server 18.04 LTS.
 
-The script all also need three other things. 
-The Azure tenant ID. this can be found from within the portal of your azure account. 
-Client ID. This is the ID of the Application that has permissions to submit batch requests
-Client Secret. The secret token that is associated with the Application
+Connect via Bastion or SSH using the administrator account, as sudo permissions 
+will be needed
+Enter the command   
+```git clone https://github.com/epiforecasts/covid-rt-estimates-batch.git```  
+This will download the repository. Run the script install.sh using the command
+```./install.sh```
+We will now execute our install script the command would be  
+```./install.sh AZURE_TENANT_ID AZURE_CLIENT_ID AZURE_CLIENT_SECRET```
 
-We will now execute our install script with our personal access token, if our git access token was "123", the command would be  
-```./install.sh 123 AZURE_TENANT_ID AZURE_CLIENT_ID AZURE_CLIENT_SECRET```
+If you are getting errors it may be that the script is not executable
+Enter the following command to make the script executable 
+```chmod +x install.sh``` 
 
 The script will do the following things:
 * Install the needed python azure libraries 
  (The installation of azure-storage-file causes a segmentation fault for an unknown reason. Do not be alarmed, the library will still be installed properly. Believe this to be a Microsoft issue)  
 * Creation of a script called ```run_batch.sh``` that ensures the git repo is updated before submitting a job  
-* Creates a cron job that will execute ```run_batch.sh``` everyday at midnight
+* Creates a cron job that will execute ```run_batch.sh --production``` everyday at midnight
 
 The script will take a few minutes to run.
 Access to the scheduler VM will need to be controlled as it needs to keep a record of the AZURE_TENANT_ID, AZURE_CLIENT_ID and AZURE_CLIENT_SECRET.

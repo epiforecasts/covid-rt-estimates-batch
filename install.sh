@@ -41,15 +41,16 @@ export AZURE_CLIENT_SECRET=$3"
 # Create shell script that the cron job will run
 echo "#!/usr/bin/env bash
 $KEYS
-git pull origin master
+git pull origin main
 python3 batch_scheduler.py \$*" >> run_batch.sh
 echo 'Created run_batch.sh'
 echo "#!/usr/bin/env bash
 $KEYS
+git pull origin main
 python3 single_scheduler.py \$*" >> run_one.sh
 echo 'Created run_one.sh'
 echo "#!/usr/bin/env bash
-git pull origin master
+git pull origin main
 $KEYS
 python3 ~/covid-rt-estimates-batch/re_scheduler.py \$*" >> rerun.sh
 echo 'Created rerun.sh'
