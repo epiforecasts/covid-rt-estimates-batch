@@ -20,9 +20,6 @@ elif [[ "$3" = "" ]]; then
     echo "The Azure Client Secret"
 else
 
-# Move to home directory
-cd ~
-
 # Install required libraries
 echo 'Installing libraries...'
 sudo apt-get install software-properties-common -y
