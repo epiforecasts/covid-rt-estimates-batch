@@ -97,7 +97,7 @@ curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash &&
 sudo rm runtimes.csv &&
 sudo rm status.csv &&
 sudo rm -r last-update && 
-sudo mkdir -p ${{AZ_BATCH_NODE_ROOT_DIR}}/fsmounts/{FILE_SHARE_NAME}/logs/{generate_task_name(dataset.name)} &&
+sudo mkdir -p ${{AZ_BATCH_NODE_ROOT_DIR}}/fsmounts/{FILE_SHARE_NAME}/logs/{DATETIME_NOWISH}/{dataset.name} &&
 """
     mount_files = [("runtimes.csv", "runtimes.csv"),
                    ("status.csv", "status.csv"),
@@ -171,7 +171,7 @@ def create_task(dataset, command, dependencies, max_wall_clock, production):
                     path=dataset.data_dir,
                     container_url=container + SAS_TOKEN))),
         batch_models.OutputFile(
-            file_pattern="$AZ_BATCH_NODE_ROOT_DIR/fsmounts/*.csv",
+            file_pattern=f"$AZ_BATCH_NODE_ROOT_DIR/fsmounts/{FILE_SHARE_NAME}/*.csv",
             upload_options=batch_models.OutputFileUploadOptions(
                 upload_condition=batch_models.
                     OutputFileUploadCondition.task_success),

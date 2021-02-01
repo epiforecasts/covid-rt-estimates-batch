@@ -62,7 +62,7 @@ chmod +x rerun.sh
 
 # Create Cron job
 crontab -l > mycron
-echo "0 0 * * * ~/run_batch.sh --production" >> mycron
+echo "0 0 * * * cd ~/covid-rt-estimates-batch && ./run_batch.sh --production" >> mycron
 crontab mycron
 rm mycron
 echo "Created cron job"
