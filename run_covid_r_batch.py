@@ -59,7 +59,7 @@ def generate_tasks(job_id, dataset_list, production, flags):
             create_json_config(dataset, blob_service_client)
         flag_list = [
             f"--log ${{AZ_BATCH_NODE_ROOT_DIR}}/fsmounts/{FILE_SHARE_NAME}/"
-            f"logs/{generate_task_name(dataset.name)}/${{AZ_BATCH_TASK_ID}}.log"
+            f"logs/{DATETIME_NOWISH}/{dataset.name}/${{AZ_BATCH_TASK_ID}}.log"
             ]
         for flag in flags:
             # Stops the force flag getting sent to derivatives
@@ -177,7 +177,15 @@ def create_task(dataset, command, dependencies, max_wall_clock, production):
                     OutputFileUploadCondition.task_success),
             destination=batch_models.OutputFileDestination(
                 container=batch_models.OutputFileBlobContainerDestination(
-                    # path=dataset.data_dir,
+                    container_url=container + SAS_TOKEN))),
+        batch_models.OutputFile(
+            file_pattern=f"$AZ_BATCH_NODE_ROOT_DIR/fsmounts/{FILE_SHARE_NAME}/last-update/*",
+            upload_options=batch_models.OutputFileUploadOptions(
+                upload_condition=batch_models.
+                    OutputFileUploadCondition.task_success),
+            destination=batch_models.OutputFileDestination(
+                container=batch_models.OutputFileBlobContainerDestination(
+                    path="last-update",
                     container_url=container + SAS_TOKEN))),
         # Upload stderr and stdout
         batch_models.OutputFile(
@@ -328,8 +336,22 @@ def create_json_config(dataset, blob_client):
                                   f"-s results "
                                   f"--account-name {STORAGE_ACCOUNT_NAME} "
                                   f"--auth-mode login && "
+                                  f"az storage blob download-batch -d . "
+                                  f"--pattern last-update/* "
+                                  f"-s results "
+                                  f"--account-name {STORAGE_ACCOUNT_NAME} "
+                                  f"--auth-mode login && "
+                                  f"az storage blob download-batch -d . "
+                                  f"--pattern *.csv "
+                                  f"-s results "
+                                  f"--account-name {STORAGE_ACCOUNT_NAME} "
+                                  f"--auth-mode login && "
                                   f"sudo cp -p -r {dataset.data_dir}/* "
                                   f"${{AZ_BATCH_NODE_SHARED_DIR}}/covid-rt-estimates/{dataset.data_dir}/ && "
+                                  f"sudo cp -p -r *.csv "
+                                  f"${{AZ_BATCH_NODE_SHARED_DIR}}/covid-rt-estimates/ && "
+                                  f"sudo cp -p -r last-update/* "
+                                  f"${{AZ_BATCH_NODE_SHARED_DIR}}/covid-rt-estimates/last-update/ && "
                                   f"cd ${{AZ_BATCH_NODE_SHARED_DIR}}/covid-rt-estimates && "
                                   f"git add -A && "
                                   f"git commit -m {dataset.name}_batch_automated_commit "
