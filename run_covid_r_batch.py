@@ -337,7 +337,7 @@ def create_json_config(dataset, blob_client):
                                   f"--account-name {STORAGE_ACCOUNT_NAME} "
                                   f"--auth-mode login && "
                                   f"az storage blob download-batch -d . "
-                                  f"--pattern last-update\/* "
+                                  f"""--pattern "last-update/*" """
                                   f"-s results "
                                   f"--account-name {STORAGE_ACCOUNT_NAME} "
                                   f"--auth-mode login && "
