@@ -332,7 +332,7 @@ def create_json_config(dataset, blob_client):
                                   f"--password {APP_PASSWORD} "
                                   f"--tenant {TENANT_ID} && "
                                   f"az storage blob download-batch -d . "
-                                  f"""--pattern "{dataset.data_dir}*" """
+                                  f"""--pattern "{dataset.data_dir}/**/latest/*" """
                                   f"-s results "
                                   f"--account-name {STORAGE_ACCOUNT_NAME} "
                                   f"--auth-mode login && "
