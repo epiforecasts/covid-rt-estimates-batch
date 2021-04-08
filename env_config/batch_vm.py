@@ -1,6 +1,6 @@
 from azure.batch import models as batchmodels
 
-DOCKER_CONTAINER_URL = 'docker.pkg.github.com/epiforecasts/covid-rt-estimates/covidrtestimates' \
+DOCKER_CONTAINER_URL = 'docker.pkg.github.com/epiforecasts/covid-rt-estimates/covid-rt-estimates' \
                        ':latest'
 REGISTRY_SERVER = "docker.pkg.github.com"
 
