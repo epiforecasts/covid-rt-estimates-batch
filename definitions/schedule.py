@@ -50,11 +50,11 @@ SCHEDULE = [Dataset("united-kingdom",
                     data_dir="subnational/united-kingdom-full/cases",
                     max_wall_clock_minutes=7*24*60
                     timeout=3*24*60*60),
-            Dataset("united-kingdom-full",
+            Dataset("united-kingdom-deaths-full",
                     data_dir="subnational/united-kingdom-full/deaths",
                     max_wall_clock_minutes=7*24*60
                     timeout=3*24*60*60),
-            Dataset("united-kingdom-full",
+            Dataset("united-kingdom-admissions-full",
                     data_dir="subnational/united-kingdom-full/admissions",
                     max_wall_clock_minutes=7*24*60
                     timeout=3*24*60*60),
@@ -90,11 +90,11 @@ SCHEDULE = [Dataset("united-kingdom",
                     data_dir="subnational/united-kingdom-local-full/cases",
                     max_wall_clock_minutes=7*24*60
                     timeout=3*24*60*60),
-            Dataset("united-kingdom-local-full",
+            Dataset("united-kingdom-local-deaths-full",
                     data_dir="subnational/united-kingdom-local-full/deaths",
                     max_wall_clock_minutes=7*24*60
                     timeout=3*24*60*60),
-            Dataset("united-kingdom-local-full",
+            Dataset("united-kingdom-local-admissions-full",
                     data_dir="subnational/united-kingdom-local-full/admissions",
                     max_wall_clock_minutes=7*24*60
                     timeout=3*24*60*60),
