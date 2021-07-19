@@ -9,8 +9,8 @@ def get_image_reference():
     return batchmodels.ImageReference(
             publisher='microsoft-azure-batch',
             offer='ubuntu-server-container',
-            sku='16-04-lts',
+            sku='20-04-lts',
             version='latest')
 
 
-VM_AGENT_SKU = 'batch.node.ubuntu 16.04'
+VM_AGENT_SKU = 'batch.node.ubuntu 20.04'
