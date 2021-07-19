@@ -1,7 +1,7 @@
 from env_config.accounts import GITHUB_USER_NAME, GITHUB_TOKEN
 
 
-PROCESSING_POOL_ID = 'covid-r-pool'
+PROCESSING_POOL_ID = 'covid-r-pool-ubuntu-20-4'
 PROCESSING_POOL_VM_SIZE = 'STANDARD_D64_V3'
 PROCESSING_POOL_MAX_VM = 10
 PROCESSING_POOL_SCALE_FORMULA = f"""startingNumberOfVMs = 0;
