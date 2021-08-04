@@ -118,8 +118,9 @@ SCHEDULE = [Dataset("united-kingdom",
                     frequency=[27]),
             Derivative("united-kingdom-collated-full",
                        data_dir="subnational/united-kingdom-full/collated",
-                       dependencies=["united-kingdom",
-                                     "united-kingdom-deaths",
-                                     "united-kingdom-admissions"],
-                       max_wall_clock_minutes=60)
+                       dependencies=["united-kingdom-full",
+                                     "united-kingdom-deaths-full",
+                                     "united-kingdom-admissions-full"],
+                       max_wall_clock_minutes=60,
+                       frequency=[23])
             ]
