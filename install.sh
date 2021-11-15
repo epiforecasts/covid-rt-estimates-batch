@@ -6,16 +6,25 @@ AZURE_CLIENT_SECRET=$3
 if [[ "$1" = "" ]]; then
     echo "This script requires the following arguments"
     echo "The Azure Tenant ID"
+    echo "The Azure Subscription ID"
     echo "The Azure Client ID"
     echo "The Azure Client Secret"
 elif [[ "$2" = "" ]]; then
     echo "This script requires the following arguments"
     echo "The Azure Tenant ID"
+    echo "The Azure Subscription ID"
     echo "The Azure Client ID"
     echo "The Azure Client Secret"
 elif [[ "$3" = "" ]]; then
     echo "This script requires the following arguments"
     echo "The Azure Tenant ID"
+    echo "The Azure Subscription ID"
+    echo "The Azure Client ID"
+    echo "The Azure Client Secret"
+elif [[ "$4" = "" ]]; then
+    echo "This script requires the following arguments"
+    echo "The Azure Tenant ID"
+    echo "The Azure Subscription ID"
     echo "The Azure Client ID"
     echo "The Azure Client Secret"
 else
@@ -36,8 +45,9 @@ echo 'Libraries installed'
 
 
 KEYS="export AZURE_TENANT_ID=$1
-export AZURE_CLIENT_ID=$2
-export AZURE_CLIENT_SECRET=$3"
+export AZURE_SUBSCRIPTION_ID=$2
+export AZURE_CLIENT_ID=$3
+export AZURE_CLIENT_SECRET=$4"
 # Create shell script that the cron job will run
 echo "#!/usr/bin/env bash
 $KEYS

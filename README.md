@@ -73,7 +73,7 @@ Enter the command
 This will download the repository. Run the script install.sh using the command
 ```./install.sh```
 We will now execute our install script the command would be  
-```./install.sh AZURE_TENANT_ID AZURE_CLIENT_ID AZURE_CLIENT_SECRET```
+```./install.sh AZURE_TENANT_ID AZURE_SUBSCRIPTION_ID AZURE_CLIENT_ID AZURE_CLIENT_SECRET```
 
 If you are getting errors it may be that the script is not executable
 Enter the following command to make the script executable 
@@ -86,6 +86,6 @@ The script will do the following things:
 * Creates a cron job that will execute ```run_batch.sh --production``` everyday at midnight
 
 The script will take a few minutes to run.
-Access to the scheduler VM will need to be controlled as it needs to keep a record of the AZURE_TENANT_ID, AZURE_CLIENT_ID and AZURE_CLIENT_SECRET.
+Access to the scheduler VM will need to be controlled as it needs to keep a record of the AZURE_TENANT_ID, AZURE_SUBSCRIPTION_ID, AZURE_CLIENT_ID and AZURE_CLIENT_SECRET.
 
 ### Environment assumptions:
