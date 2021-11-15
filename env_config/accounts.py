@@ -1,3 +1,4 @@
+import os
 from azure.keyvault.secrets import SecretClient
 from azure.identity import EnvironmentCredential
 
@@ -46,3 +47,4 @@ APP_USER_NAME = client.get_secret("APP-USER-NAME").value
 APP_PASSWORD = client.get_secret("APP-PASSWORD").value
 TENANT_ID = client.get_secret("TENANT-ID").value
 
+SUBSCRIPTION_ID = os.environ.get('AZURE_SUBSCRIPTION_ID')

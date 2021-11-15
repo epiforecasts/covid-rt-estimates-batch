@@ -15,7 +15,8 @@ from definitions.processable_entities import Dataset, Derivative, Publication
 from definitions.schedule import SCHEDULE
 from env_config.accounts import RESOURCE_GROUP, STORAGE_ACCOUNT_KEY, \
     STORAGE_ACCOUNT_NAME, SAS_TOKEN, BATCH_ACCOUNT_KEY, BATCH_ACCOUNT_NAME, \
-    APP_USER_NAME, APP_PASSWORD, TENANT_ID, ANCIL_FILES_URL, FILE_SHARE_NAME, \
+    APP_USER_NAME, APP_PASSWORD, TENANT_ID, SUBSCRIPTION_ID, \
+    ANCIL_FILES_URL, FILE_SHARE_NAME, \
     TEMP_FILE_STORAGE, RESULTS_CONTAINER, TEST_RESULTS_CONTAINER,\
     CONFIG_CONTAINER, PROCESS_LOG_CONTAINER, COMMIT_LOG_CONTAINER
 from env_config.batch_vm import DOCKER_CONTAINER_URL
@@ -134,6 +135,7 @@ def create_commit_task(dataset):
 az login --service-principal --username {APP_USER_NAME} \\
 --password {APP_PASSWORD} \\
 --tenant {TENANT_ID} &&
+az account set --subscription {SUBSCRIPTION_ID} && \\
 az batch account login --name {BATCH_ACCOUNT_NAME} \\
 --resource-group {RESOURCE_GROUP} &&
 az batch task create --job-id {COMMIT_JOB_ID} \\
@@ -143,11 +145,11 @@ az batch task create --job-id {COMMIT_JOB_ID} \\
 '''
     if isinstance(dataset, Derivative):
         command += f"export LANG=en_US.UTF-8 &&" \
-                   f"az storage blob download-batch -d . " \
-                   f"--pattern **/summary/*.csv " \
-                   f"-s results " \
-                   f"--account-name {STORAGE_ACCOUNT_NAME} " \
-                   f"--auth-mode login && "
+                   f"azcopy copy " \
+                   f"https://{STORAGE_ACCOUNT_NAME}.blob.core.windows.net/results/* " \
+                   f". " \
+                   f"--recursive " \
+                   f"--include-pattern **/summary/*.csv && "
     return command
 
 
@@ -331,32 +333,14 @@ def create_json_config(dataset, blob_client):
                                   f"--username {APP_USER_NAME} "
                                   f"--password {APP_PASSWORD} "
                                   f"--tenant {TENANT_ID} && "
-                                  f"az storage blob download-batch -d . "
-                                  f"""--pattern "{dataset.data_dir}/**/latest/*" """
-                                  f"-s results "
-                                  f"--account-name {STORAGE_ACCOUNT_NAME} "
-                                  f"--auth-mode login && "
-                                  f"az storage blob download-batch -d . "
-                                  f"""--pattern "{dataset.data_dir}/summary/*" """
-                                  f"-s results "
-                                  f"--account-name {STORAGE_ACCOUNT_NAME} "
-                                  f"--auth-mode login && "
-                                  f"az storage blob download-batch -d . "
-                                  f"""--pattern "last-update/*" """
-                                  f"-s results "
-                                  f"--account-name {STORAGE_ACCOUNT_NAME} "
-                                  f"--auth-mode login && "
-                                  f"az storage blob download-batch -d . "
-                                  f"""--pattern "*.csv" """
-                                  f"-s results "
-                                  f"--account-name {STORAGE_ACCOUNT_NAME} "
-                                  f"--auth-mode login && "
+                                  f"az account set --subscription {SUBSCRIPTION_ID} && "
+                                  f"azcopy copy " \
+                                  f"https://{STORAGE_ACCOUNT_NAME}.blob.core.windows.net/results/* " \
+                                  f". " \
+                                  f"--recursive " \
+                                  f"--include-path {dataset.data_dir}/summary/ && " \
                                   f"sudo cp -p -r {dataset.data_dir}/* "
                                   f"${{AZ_BATCH_NODE_SHARED_DIR}}/covid-rt-estimates/{dataset.data_dir}/ && "
-                                  f"sudo cp -p -r *.csv "
-                                  f"${{AZ_BATCH_NODE_SHARED_DIR}}/covid-rt-estimates/ && "
-                                  f"sudo cp -p -r last-update/* "
-                                  f"${{AZ_BATCH_NODE_SHARED_DIR}}/covid-rt-estimates/last-update/ && "
                                   f"cd ${{AZ_BATCH_NODE_SHARED_DIR}}/covid-rt-estimates && "
                                   f"git add -A && "
                                   f"git commit -m {dataset.name}_batch_automated_commit "

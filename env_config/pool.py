@@ -21,7 +21,12 @@ COMMIT_POOL_VM_SIZE = 'STANDARD_D4_V3'
 
 COMMIT_POOL_START_TASK = f'''/bin/bash -c "cd ${{AZ_BATCH_NODE_SHARED_DIR}} &&
 git clone --depth 100 https://{GITHUB_USER_NAME}:{GITHUB_TOKEN}@github.com/epiforecasts/covid-rt-estimates.git &&
-curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash &&
+wget https://aka.ms/downloadazcopy-v10-linux &&
+tar -xvf downloadazcopy-v10-linux &&
+chmod +x azcopy_linux_amd64_*/azcopy &&
+sudo cp ./azcopy_linux_amd64_*/azcopy /usr/bin/ &&
+rm -rf downloadazcopy-v10-linux azcopy_linux_amd64_*
 "'''
 COMMIT_POOL_SCALE_FORMULA = f"""startingNumberOfVMs = 0;
 maxNumberofVMs = 1;
