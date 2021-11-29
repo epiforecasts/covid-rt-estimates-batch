@@ -95,9 +95,9 @@ def generate_full_command(execute_command, production, dataset):
 
     command = f"""/bin/bash -c "
 curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash &&
-sudo rm runtimes.csv &&
-sudo rm status.csv &&
-sudo rm -r last-update && 
+sudo rm runtimes.csv;
+sudo rm status.csv;
+sudo rm -r last-update;
 sudo mkdir -p ${{AZ_BATCH_NODE_ROOT_DIR}}/fsmounts/{FILE_SHARE_NAME}/logs/{DATETIME_NOWISH}/{dataset.name} &&
 """
     mount_files = [("runtimes.csv", "runtimes.csv"),
