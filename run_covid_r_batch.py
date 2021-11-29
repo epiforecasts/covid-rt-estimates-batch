@@ -339,8 +339,8 @@ def create_json_config(dataset, blob_client):
                                   f". " \
                                   f"--recursive " \
                                   f"--include-path {dataset.data_dir}/summary/ && " \
-                                  f"sudo cp -p -r {dataset.data_dir}/* "
-                                  f"${{AZ_BATCH_NODE_SHARED_DIR}}/covid-rt-estimates/{dataset.data_dir}/ && "
+                                  f"sudo cp -p -r --parents {dataset.data_dir}/* "
+                                  f"${{AZ_BATCH_NODE_SHARED_DIR}}/covid-rt-estimates/ && "
                                   f"cd ${{AZ_BATCH_NODE_SHARED_DIR}}/covid-rt-estimates && "
                                   f"git add -A && "
                                   f"git commit -m {dataset.name}_batch_automated_commit "
