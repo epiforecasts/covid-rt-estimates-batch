@@ -2,6 +2,7 @@ import datetime
 
 dt = datetime.datetime.today()
 DAY_OF_MONTH = dt.day
+DAY_OF_WEEK = dt.strftime('%A')
 DATETIME_NOWISH = datetime.datetime.now().strftime("%Y%m%dT%H%M")
 DAILY = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
          21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31]
