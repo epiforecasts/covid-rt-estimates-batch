@@ -1,7 +1,7 @@
 import argparse
 import logging
 
-from definitions.date_standards import DAY_OF_MONTH
+from definitions.date_standards import DAY_OF_MONTH, DAY_OF_WEEK
 from definitions.schedule import SCHEDULE
 from run_covid_r_batch import run
 
@@ -15,7 +15,7 @@ def main(args):
     datasets_to_run = []
 
     for item in SCHEDULE:
-        if DAY_OF_MONTH in item.frequency:
+        if DAY_OF_MONTH in item.frequency or DAY_OF_WEEK in item.frequency:
             datasets_to_run.append(item)
 
     run(datasets_to_run, production, flags)
