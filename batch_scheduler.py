@@ -15,7 +15,7 @@ def main(args):
     datasets_to_run = []
 
     for item in SCHEDULE:
-        if DAY_OF_MONTH in item.frequency or DAY_OF_WEEK in item.frequency:
+        if str(DAY_OF_MONTH) in str(item.frequency) or str(DAY_OF_WEEK) in str(item.frequency):
             datasets_to_run.append(item)
 
     run(datasets_to_run, production, flags)
