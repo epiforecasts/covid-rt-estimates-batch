@@ -1,5 +1,7 @@
 # Covid Infrastructure
 
+> **Archived.** No longer maintained; last updated May 2022.
+
 ## Usage
 ### Running the scheduled tasks:
 This should be done under cron using `~/run_batch.sh` located in the home directory. It can be manually triggered using the following steps:
